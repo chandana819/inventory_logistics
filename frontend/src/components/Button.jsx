@@ -1,13 +1,13 @@
 import React from 'react';
 
 export const Button = React.forwardRef(({ className = '', variant = 'default', size = 'md', ...props }, ref) => {
-  const baseStyles = 'font-medium rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2';
+  const baseStyles = 'font-medium rounded-lg transition duration-200 hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-slate-950';
   
   const variants = {
-    default: 'bg-slate-900 text-white hover:bg-slate-800 focus:ring-slate-500',
-    secondary: 'bg-slate-200 text-slate-900 hover:bg-slate-300 focus:ring-slate-500',
-    outline: 'border border-slate-300 text-slate-900 hover:bg-slate-50 focus:ring-slate-500',
-    danger: 'bg-red-600 text-white hover:bg-red-700 focus:ring-red-500',
+    default: 'bg-blue-600 text-white shadow-lg shadow-blue-950/30 hover:bg-blue-500 focus:ring-blue-400',
+    secondary: 'border border-slate-700 bg-slate-800 text-slate-200 hover:border-slate-600 hover:bg-slate-700 focus:ring-slate-500',
+    outline: 'border border-blue-400/50 text-blue-300 hover:bg-blue-500/10 focus:ring-blue-400',
+    danger: 'bg-orange-600 text-white shadow-lg shadow-orange-950/30 hover:bg-orange-500 focus:ring-orange-400',
   };
 
   const sizes = {

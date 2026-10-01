@@ -2,7 +2,7 @@ from sqlalchemy.orm import Session
 from datetime import datetime, timedelta
 from typing import List, Dict
 import json
-from app.models import Order, OrderItem, Product, Shipment, ShipmentStatus
+from app.models import Order, OrderItem, Product, Shipment, ShipmentStatus, Supplier
 from app.schemas import (
     DemandForecastResponse, ReorderRecommendation, 
     AnomalyAlert, DeliveryDelayPrediction
@@ -229,6 +229,13 @@ class AIInsightsService:
         pending_orders = db.query(func.count(Order.id)).filter(
             Order.status == "pending"
         ).scalar() or 0
+
+        # Total orders and units currently represented in inventory
+        total_orders = db.query(func.count(Order.id)).scalar() or 0
+        total_units = db.query(func.sum(Product.quantity)).filter(Product.is_active == 1).scalar() or 0
+
+        # Active supplier count
+        active_suppliers = db.query(func.count(Supplier.id)).filter(Supplier.is_active == 1).scalar() or 0
         
         # In-transit shipments
         in_transit = db.query(func.count(Shipment.id)).filter(
@@ -243,8 +250,11 @@ class AIInsightsService:
         return {
             "total_products": total_products,
             "stock_value": float(stock_value) if stock_value else 0,
+            "total_units": int(total_units),
+            "total_orders": total_orders,
             "low_stock_items": low_stock,
             "pending_orders": pending_orders,
             "in_transit_shipments": in_transit,
-            "delayed_shipments": delayed
+            "delayed_shipments": delayed,
+            "active_suppliers": active_suppliers
         }

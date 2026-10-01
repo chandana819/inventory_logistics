@@ -98,7 +98,7 @@ export default function ShipmentsPage() {
             </CardHeader>
             <CardContent className="space-y-3">
               {shipment.tracking_number && (
-                <div className="p-3 bg-slate-50 rounded-lg">
+                <div className="rounded-lg border border-slate-800 bg-slate-950/70 p-3 transition hover:border-blue-400/40 hover:bg-blue-500/5">
                   <p className="text-sm text-slate-600">Tracking Number</p>
                   <p className="font-mono font-bold">{shipment.tracking_number}</p>
                 </div>

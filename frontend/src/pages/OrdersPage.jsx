@@ -90,7 +90,7 @@ export default function OrdersPage() {
           <CardContent>
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
-                <label className="block text-sm font-medium text-slate-700 mb-2">Order Items</label>
+                <label className="mb-2 block text-sm font-medium text-slate-300">Order Items</label>
                 {formData.order_items.map((item, idx) => (
                   <div key={idx} className="flex gap-2 mb-2">
                     <Input
@@ -128,7 +128,7 @@ export default function OrdersPage() {
                 ))}
               </div>
               <div>
-                <label className="block text-sm font-medium text-slate-700 mb-1">Notes</label>
+                <label className="mb-1 block text-sm font-medium text-slate-300">Notes</label>
                 <textarea
                   value={formData.notes}
                   onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
@@ -162,7 +162,7 @@ export default function OrdersPage() {
               </thead>
               <tbody>
                 {orders.map((order) => (
-                  <tr key={order.id} className="border-b border-slate-200 hover:bg-slate-50">
+                  <tr key={order.id} className="border-b border-slate-800 transition-colors hover:bg-blue-500/5">
                     <td className="p-3 font-medium">#{order.id}</td>
                     <td className="p-3">{new Date(order.order_date).toLocaleDateString()}</td>
                     <td className="p-3 text-right">${order.total_amount.toFixed(2)}</td>

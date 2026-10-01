@@ -25,27 +25,27 @@ export default function Layout({ children }) {
   ];
 
   return (
-    <div className="min-h-screen bg-slate-100">
+    <div className="dashboard-canvas min-h-screen">
       {/* Header */}
-      <header className="bg-white shadow-sm sticky top-0 z-40">
+      <header className="sticky top-0 z-40 border-b border-slate-800 bg-slate-950/95 shadow-lg shadow-black/20 backdrop-blur">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
           <Link to="/dashboard" className="flex items-center gap-2">
             <Package className="w-8 h-8 text-blue-600" />
-            <span className="text-xl font-bold text-slate-900">Inventory Pro</span>
+            <span className="text-xl font-bold text-slate-100">Inventory Pro</span>
           </Link>
 
           <div className="hidden md:flex items-center gap-4">
             {user && (
               <>
-                <span className="text-sm text-slate-600">
+                <span className="text-sm text-slate-300">
                   {user.name}
-                  <span className="ml-2 px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full">
+                  <span className="ml-2 rounded-full bg-blue-500/15 px-2 py-1 text-xs text-blue-300 ring-1 ring-blue-400/30">
                     {user.role}
                   </span>
                 </span>
                 <button
                   onClick={handleLogout}
-                  className="flex items-center gap-2 px-4 py-2 text-red-600 hover:bg-red-50 rounded-lg transition"
+                  className="flex items-center gap-2 rounded-lg px-4 py-2 text-orange-300 transition hover:bg-orange-500/10"
                 >
                   <LogOut className="w-4 h-4" /> Logout
                 </button>
@@ -62,7 +62,7 @@ export default function Layout({ children }) {
       <div className="max-w-7xl mx-auto">
         <div className="grid grid-cols-1 md:grid-cols-5 gap-6 p-4">
           {/* Sidebar */}
-          <aside className={`md:col-span-1 bg-white rounded-lg shadow-sm p-4 ${mobileMenuOpen ? 'block' : 'hidden md:block'}`}>
+          <aside className={`dashboard-panel rounded-lg p-4 ${mobileMenuOpen ? 'block' : 'hidden md:block'}`}>
             <nav className="space-y-2">
               {navItems.map(({ path, label, icon: Icon }) => (
                 <Link
@@ -71,8 +71,8 @@ export default function Layout({ children }) {
                   onClick={() => setMobileMenuOpen(false)}
                   className={`flex items-center gap-3 px-4 py-2 rounded-lg transition ${
                     isActive(path)
-                      ? 'bg-blue-600 text-white'
-                      : 'text-slate-700 hover:bg-slate-100'
+                      ? 'bg-blue-600 text-white shadow-lg shadow-blue-950/50'
+                      : 'text-slate-300 hover:bg-slate-800 hover:text-white'
                   }`}
                 >
                   <Icon className="w-5 h-5" />
@@ -81,10 +81,10 @@ export default function Layout({ children }) {
               ))}
             </nav>
 
-            <div className="mt-6 pt-6 border-t">
+            <div className="mt-6 border-t border-slate-800 pt-6">
               <button
                 onClick={handleLogout}
-                className="w-full flex items-center gap-3 px-4 py-2 text-red-600 hover:bg-red-50 rounded-lg transition"
+                className="flex w-full items-center gap-3 rounded-lg px-4 py-2 text-orange-300 transition hover:bg-orange-500/10"
               >
                 <LogOut className="w-5 h-5" />
                 Logout
@@ -93,7 +93,7 @@ export default function Layout({ children }) {
           </aside>
 
           {/* Main Content */}
-          <main className="md:col-span-4 bg-white rounded-lg shadow-sm p-6">
+          <main className="dashboard-panel rounded-lg p-6 md:col-span-4">
             {children}
           </main>
         </div>

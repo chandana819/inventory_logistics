@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { BarChart, Bar, LineChart, Line, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
-import { Package, ShoppingCart, Truck, AlertTriangle } from 'lucide-react';
+import { Package, ShoppingCart, Truck, AlertTriangle, Boxes, Users, Clock3 } from 'lucide-react';
 import { aiAPI } from '../lib/services';
 import { Card, CardContent, CardHeader, CardTitle, Alert } from '../components';
 
@@ -42,8 +42,8 @@ export default function DashboardPage() {
       <CardContent className="pt-6">
         <div className="flex items-center justify-between">
           <div>
-            <p className="text-slate-500 text-sm text-gray-600">{title}</p>
-            <p className="text-2xl font-bold mt-2">{value}</p>
+            <p className="text-sm text-slate-400">{title}</p>
+            <p className="mt-2 text-2xl font-bold text-white">{value}</p>
           </div>
           <Icon className={`w-12 h-12 ${color}`} />
         </div>
@@ -52,41 +52,51 @@ export default function DashboardPage() {
   );
 
   return (
-    <div className="space-y-6">
-      <h1 className="text-3xl font-bold">Dashboard</h1>
+    <div className="space-y-4">
+      <div className="flex items-end justify-between border-b border-slate-800 pb-5">
+        <div>
+          <p className="mb-1 text-xs font-semibold uppercase tracking-[0.2em] text-blue-400">Operations overview</p>
+          <h1 className="text-2xl font-bold tracking-tight text-white sm:text-3xl">Dashboard</h1>
+        </div>
+        <div className="hidden rounded-full border border-green-400/20 bg-green-400/10 px-3 py-1 text-xs font-medium text-green-300 sm:block">
+          Live inventory data
+        </div>
+      </div>
 
       {error && <Alert type="error" title="Error" children={error} />}
 
       {/* Key Metrics */}
       {metrics && (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-          <StatCard title="Total Products" value={metrics.total_products} icon={Package} color="text-blue-500" />
-          <StatCard title="Stock Value" value={`$${metrics.stock_value?.toLocaleString()}`} icon={Package} color="text-green-500" />
-          <StatCard title="Pending Orders" value={metrics.pending_orders} icon={ShoppingCart} color="text-orange-500" />
-          <StatCard title="In Transit" value={metrics.in_transit_shipments} icon={Truck} color="text-purple-500" />
+        <div className="grid grid-cols-2 gap-3 xl:grid-cols-6">
+          <StatCard title="Total Products" value={metrics.total_products} icon={Package} color="text-blue-400" />
+          <StatCard title="Stock Value" value={`$${metrics.stock_value?.toLocaleString()}`} icon={Package} color="text-green-400" />
+          <StatCard title="Pending Orders" value={metrics.pending_orders} icon={ShoppingCart} color="text-orange-400" />
+          <StatCard title="In Transit" value={metrics.in_transit_shipments} icon={Truck} color="text-orange-400" />
+          <StatCard title="Total Units" value={metrics.total_units?.toLocaleString()} icon={Boxes} color="text-blue-400" />
+          <StatCard title="Suppliers" value={metrics.active_suppliers} icon={Users} color="text-green-400" />
         </div>
       )}
 
       {/* Alerts Section */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
         {/* Anomalies */}
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
-              <AlertTriangle className="w-5 h-5 text-red-500" />
+              <AlertTriangle className="h-5 w-5 text-orange-400" />
               Anomaly Alerts
             </CardTitle>
           </CardHeader>
           <CardContent>
             {anomalies.length === 0 ? (
-              <p className="text-slate-600">No anomalies detected</p>
+              <p className="dashboard-muted">No anomalies detected</p>
             ) : (
               <div className="space-y-2">
                 {anomalies.slice(0, 5).map((alert, idx) => (
                   <div key={idx} className={`p-3 rounded-lg text-sm ${
-                    alert.severity === 'high' ? 'bg-red-50 text-red-800' :
-                    alert.severity === 'medium' ? 'bg-yellow-50 text-yellow-800' :
-                    'bg-blue-50 text-blue-800'
+                    alert.severity === 'high' ? 'border border-orange-400/30 bg-orange-500/10 text-orange-200' :
+                    alert.severity === 'medium' ? 'border border-yellow-400/30 bg-yellow-500/10 text-yellow-200' :
+                    'border border-blue-400/30 bg-blue-500/10 text-blue-200'
                   }`}>
                     <p className="font-medium">{alert.type}</p>
                     <p>{alert.description}</p>
@@ -101,19 +111,19 @@ export default function DashboardPage() {
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
-              <Truck className="w-5 h-5 text-red-500" />
+              <Clock3 className="h-5 w-5 text-orange-400" />
               Predicted Delays
             </CardTitle>
           </CardHeader>
           <CardContent>
             {delays.length === 0 ? (
-              <p className="text-slate-600">No delays predicted</p>
+              <p className="dashboard-muted">No delays predicted</p>
             ) : (
               <div className="space-y-2">
                 {delays.slice(0, 5).map((delay, idx) => (
-                  <div key={idx} className="p-3 bg-red-50 rounded-lg text-sm">
+                  <div key={idx} className="rounded-lg border border-orange-400/30 bg-orange-500/10 p-3 text-sm">
                     <p className="font-medium">Order #{delay.order_id}</p>
-                    <p className="text-red-800">{Math.round(delay.delay_probability * 100)}% chance of {delay.predicted_delay_days}d delay</p>
+                    <p className="text-orange-200">{Math.round(delay.delay_probability * 100)}% chance of {delay.predicted_delay_days}d delay</p>
                   </div>
                 ))}
               </div>
@@ -129,9 +139,9 @@ export default function DashboardPage() {
             <CardTitle>Inventory Overview</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
               <div>
-                <p className="text-sm text-slate-600 mb-2">Stock Status</p>
+                <p className="dashboard-muted mb-2 text-sm">Stock Status</p>
                 <ResponsiveContainer width="100%" height={300}>
                   <PieChart>
                     <Pie
@@ -143,8 +153,8 @@ export default function DashboardPage() {
                       cy="50%"
                       labelLine={false}
                       label={({ name, value }) => `${name}: ${value}`}
-                      outerRadius={100}
-                      fill="#8884d8"
+                      outerRadius={88}
+                      fill="#2563eb"
                       dataKey="value"
                     >
                       <Cell fill="#ef4444" />
@@ -156,19 +166,23 @@ export default function DashboardPage() {
               </div>
 
               <div>
-                <p className="text-sm text-slate-600 mb-2">Recent Activity Stats</p>
+                <p className="dashboard-muted mb-2 text-sm">Recent Activity Stats</p>
                 <div className="space-y-3">
-                  <div className="flex justify-between items-center p-3 bg-slate-50 rounded">
+                  <div className="dashboard-soft-panel flex items-center justify-between rounded p-3">
                     <span>Low Stock Items</span>
-                    <span className="font-bold text-red-600">{metrics.low_stock_items}</span>
+                    <span className="font-bold text-orange-400">{metrics.low_stock_items}</span>
                   </div>
-                  <div className="flex justify-between items-center p-3 bg-slate-50 rounded">
+                  <div className="dashboard-soft-panel flex items-center justify-between rounded p-3">
                     <span>Delayed Shipments</span>
-                    <span className="font-bold text-orange-600">{metrics.delayed_shipments}</span>
+                    <span className="font-bold text-orange-400">{metrics.delayed_shipments}</span>
                   </div>
-                  <div className="flex justify-between items-center p-3 bg-slate-50 rounded">
+                  <div className="dashboard-soft-panel flex items-center justify-between rounded p-3">
                     <span>Stock Value</span>
                     <span className="font-bold text-green-600">${metrics.stock_value?.toLocaleString()}</span>
+                  </div>
+                  <div className="dashboard-soft-panel flex items-center justify-between rounded p-3">
+                    <span>Total Orders</span>
+                    <span className="font-bold text-blue-400">{metrics.total_orders}</span>
                   </div>
                 </div>
               </div>
